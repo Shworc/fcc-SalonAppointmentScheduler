@@ -1,0 +1,28 @@
+#! /bin/bash
+
+PSQL="psql --username=freecodecamp --dbname=postgres --no-align --tuples-only -c"
+
+echo "$($PSQL "CREATE DATABASE salon")"
+echo "$($PSQL "\c salon")"
+
+PSQL="psql --username=freecodecamp --dbname=salon --no-align --tuples-only -c"
+
+echo "$($PSQL "CREATE TABLE customers(customer_id SERIAL PRIMARY KEY NOT NULL, phone VARCHAR(255) NOT NULL UNIQUE, name VARCHAR(255))")"
+echo "$($PSQL "CREATE TABLE services(service_id SERIAL PRIMARY KEY NOT NULL, name VARCHAR(255))")"
+echo "$($PSQL "CREATE TABLE appointments(appointment_id SERIAL PRIMARY KEY NOT NULL, time VARCHAR(255), customer_id integer REFERENCES customers(customer_id) NOT NULL, service_id integer REFERENCES services(service_id) NOT NULL)")"
+echo "$($PSQL "INSERT INTO customers(phone, name) VALUES('555-5555', 'Me'), ('444-4444', 'She'), ('333-3333', 'Him')")"
+echo "$($PSQL "INSERT INTO services(name) VALUES('cut'), ('color'), ('perm'), ('style'), ('trim')")"
+echo "$($PSQL "INSERT INTO appointments(time, customer_id, service_id) VALUES(LOCALTIME(0) + interval '1 hours', 1, 1), (LOCALTIME(0) + interval '2 hours', 2, 3), (LOCALTIME(0) + interval '3 hours', 3, 5)")"
+#echo "$($PSQL "")"
+if [[ salon.sh ]]
+then
+  > salon.sh
+  chmod +x salon.sh
+  echo "#! /bin/bash" > salon.sh
+  ./salon.sh
+fi
+#echo "$($PSQL "TRUNCATE customers, appointments, services")"
+#echo "$($PSQL "DROP TABLE customers, appointments, services")"
+
+#echo "$($PSQL "DROP TABLE customers, services")"
+
